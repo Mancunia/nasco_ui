@@ -11,3 +11,172 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+*{
+  transition: 0.5s;
+}
+
+/* row */
+.row{
+  min-width:inherit;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  display:flex;
+  flex-direction: row;
+  gap:5%;
+  margin-top:1%;/* padding:10px; */
+  }
+  .row > .container{
+  width: 50%;
+  padding: 10px;
+  
+  }
+
+.App{
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+
+.card{
+  box-shadow: 1px 1px 3px #000;
+  border-radius: 10px;
+  margin: 2%;
+  padding: 1%;
+}
+
+ul{
+  display: flex;
+  flex-direction: column;
+  position:relative;
+  height:45rem;
+  overflow-y: scroll;
+  gap:5%;
+}
+
+li{
+  list-style-type: none;
+  width: inherit;
+  height: max-content;
+  display: flex;
+  /* border-bottom: 1px solid #423e3b34; */
+  padding:25px;
+}
+li:hover{
+  border-left: 5px solid #423E3B;
+  cursor: pointer;
+  background-color: #423e3b27;
+}
+.title{
+  text-align: left;
+  /* font-family:Arial, Helvetica, sans-serif; */
+  font-size: 18px;
+  font-weight:normal; 
+  letter-spacing: 0px;
+  color: #423E3B;
+  margin-left: 3px;
+  margin-right: 5px;
+  
+}
+
+.time{
+  text-align: left;
+  /* font-family:Arial, Helvetica, sans-serif; */
+  font-size: 13px;
+  font-weight:normal; 
+  letter-spacing: 0px;
+  color: #423E3B;
+  margin-left: 3px;
+  margin-right: 5px;
+
+}
+
+
+.input_field{
+  display: flex;
+  flex-direction: column;
+  width: inherit;
+}
+.input_field label{
+  font-size: small;
+}
+.input_field input[type="text"],input[type="password"],input[type="number"],input[type="date"],input[type="email"]{
+  border-radius:5px;
+  padding:10px;
+  
+}
+
+.employee{
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  /* padding:10px; */
+  /* gap:5%; */
+  margin:70% 0% 0% 11%;
+ 
+}
+.employee fieldset{
+  background-color: #fff;
+  border-radius:10px;
+ 
+}
+.employee legend {
+  /*background-color: gray;*/
+  color: #000;
+  padding: 5px 10px;
+  border-radius:5px;
+}
+.employee .field{
+   display: flex;
+  flex-direction: row;
+  gap:5%;
+  margin-bottom:3%;
+  width: inherit;
+}
+
+.employee label{
+  font-weight: bold;
+  font-size:18px;
+  color: #2a323c;
+  text-align: left;
+}
+
+.employee span{
+  padding: 7px;
+  width:max-content;
+  background-color: #fafafa;
+  border-radius: 2px;
+  border-bottom: 0px solid #eeeeee;
+  box-shadow: none;
+  color: rgba(0, 0, 0, 0.6);
+  font-size: 18px;
+  align-self:right
+}
+
+
+form{
+  gap:5%;
+}
+
+form .input_field input{
+  margin-bottom: 10px;
+  border:0px;
+  width: 100%;
+  box-shadow: 1px 1px 1px 1px rgba(0, 0, 0, 0.342);
+}
+
+
+form .input_field button{
+  margin: 10px;
+  padding:10px;
+  border:0px;
+  border-radius:5px;
+  background-color: rgba(0, 140, 255, 0.5);
+  width: 100%;
+  box-shadow: 1px 1px 1px 1px rgba(11, 127, 204, 0.74);
+}
+
+form .input_field button:hover{
+  border:2px solid rgba(9, 101, 177, 0.966);
+}
