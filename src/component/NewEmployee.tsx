@@ -1,6 +1,12 @@
 import { useState,useEffect } from "react"
 import swal from "sweetalert";
-const Base_url = (process.env.REACT_APP_BASE_URL as string);
+
+let Base_url = (process.env.REACT_APP_BASE_URL as string);
+
+if(!Base_url){
+    Base_url = "http://localhost:5000/";
+}
+
 
 const NewEmployee = ()=>{
 
@@ -61,32 +67,32 @@ const NewEmployee = ()=>{
                     <div className="container">
                          <div className="input_field">
                         <label htmlFor="fname">First Name</label>
-                        <input type="text" value={firstName} onChange={(e)=>setFirstName(e.target.value)} required id="fname" />
+                        <input type="text" value={firstName} placeholder="Enter first name" onChange={(e)=>setFirstName(e.target.value)} required id="fname" />
                     </div>
                     </div>
                     <div className="container">
                     <div className="input_field">
                         <label htmlFor="phone">Last Name</label>
-                        <input type="text" value={lastName} onChange={(e)=>setLastName(e.target.value)} required id="lname" />
+                        <input type="text" value={lastName} placeholder="Enter last name" onChange={(e)=>setLastName(e.target.value)} required id="lname" />
                     </div>
                     </div>
                 </div>
            
                     <div className="input_field">
                         <label htmlFor="phone">Phone</label>
-                        <input type="text" value={phone} onChange={(e)=>setPhone(e.target.value)} required id="fname" />
+                        <input type="text" value={phone} placeholder="Enter phone number" onChange={(e)=>setPhone(e.target.value)} required id="fname" />
                     </div>
                     <div className="input_field">
                         <label htmlFor="email">Email</label>
-                        <input type="email" value={email} onChange={(e)=>setEmail(e.target.value)} required id="fname" />
+                        <input type="email" value={email} placeholder="Enter email" onChange={(e)=>setEmail(e.target.value)} required id="fname" />
                     </div>
                     <div className="input_field">
                         <label htmlFor="address">Address</label>
-                        <input type="text" value={address} onChange={(e)=>setAddress(e.target.value)}  required id="fname" />
+                        <input type="text" value={address} placeholder="Add Address" onChange={(e)=>setAddress(e.target.value)}  required id="fname" />
                     </div>
                     <div className="input_field">
                         <label htmlFor="dob">Date of Birth</label>
-                        <input type="date" value={dob} onChange={(e)=>setDOB(e.target.value)} required id="fname" />
+                        <input type="date" value={dob} placeholder="Set Date of birth" onChange={(e)=>setDOB(e.target.value)} required id="fname" />
                     </div>
                     <div className="input_field">
                         <button>Submit</button>

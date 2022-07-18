@@ -1,8 +1,12 @@
-import {useState,useEffect} from 'react'
+import React, {useState,useEffect} from 'react'
 import swal from 'sweetalert';
 
 
-const Base_url = (process.env.REACT_APP_BASE_URL as string);
+let Base_url = (process.env.REACT_APP_BASE_URL as string);
+
+if(!Base_url){
+    Base_url = "http://localhost:5000/";
+}
 
 interface employeeInterface {
     map: any;
@@ -32,7 +36,7 @@ const getData = async()=>{
 
     let data:employeeInterface = await response.json();
 
-    console.log(data);
+    // console.log(data);
 
     return data;
 
@@ -45,7 +49,22 @@ const Employees = ()=>{
 
     const [employees,setEmployees]= useState<employeeInterface>();
     const [currentEmployees,setCurrentEmployees]=useState<employeeInterface>();
-    const [selected,setSelected]=useState<employeeInterface>();
+    const [selected,setSelected]=useState<string>();
+
+    const [firstName,setFirstName]=useState<string>()
+    const [lastName,setLastName]=useState<string>()
+    const [phone,setPhone]=useState<string>()
+    const [address,setAddress]=useState<string>()
+    const [email,setEmail]=useState<string>()
+    const [dob,setDOB]=useState<string>()
+
+    const [editBtn,setEditBtn]=useState<string>('Edit')
+    const [deleteBtn,setDeleteBtn]=useState<string>('Delete')
+
+
+
+
+
 
     const [search,setSearch]=useState<string>('');
 
@@ -60,9 +79,11 @@ const Employees = ()=>{
         let abortController = new AbortController(); 
 
         loadEmployees().then();
+        let interval = setInterval(loadEmployees,10000);
 
         return()=>{
             abortController.abort();
+            clearInterval(interval);
         }
 
     },[])
@@ -79,15 +100,101 @@ const Employees = ()=>{
         console.log(currentEmployees);
 
     },[search])
+    
+        const handleDelete = async(e:React.MouseEvent)=>{
+            e.preventDefault();
+            try{
+                let response = await fetch(Base_url,{
+                    method:'DELETE',
+                    headers:{
+                        "Content-Type": "application/json"
+                    },
+                    body:JSON.stringify({id:selected})
+                })
+    
+                if(!response.ok){
+                    throw new Error("Error delete employee")
+                }
+    
+                if(response){
+                    swal("Great","Record delete successfully","success");
+                    setSelected('');
+                    loadEmployees();
+                }
+            }
+            catch(err){
+                swal("Employee","Something went wrong","error")
+            }
+        }
+    
+        const handleEdit = async(e:React.MouseEvent)=>{
+            e.preventDefault();
+            try{
+                setEditBtn('Loading...');
+
+                let response = await fetch(Base_url,{
+                    method:'PUT',
+                    headers:{
+                        "Content-Type": "application/json"
+                    },
+                    body:JSON.stringify({
+                        id:selected,
+                        firstName:firstName,
+                        lastName:lastName,
+                        address:address,
+                        phone:phone,
+                        email:email,
+                        date_of_birth:dob
+                    })
+
+                })
+    
+                if(!response.ok){
+                    throw new Error("Error edit employee")
+                }
+    
+                if(response){
+                    let data = await response.json();
+                    setFirstName(data.firstName);
+                    setLastName(data.lastName);
+                    setPhone(data.phone);
+                    setAddress(data.address);
+                    setDOB(data.data_of_birth);
+                    setEmail(data.email);
+
+
+                    loadEmployees();
+                    
+                    setEditBtn('Done!');
+                    setTimeout(()=>{
+                    setEditBtn('Edit');
+                    },2000)
+                }
+               
+            }
+            catch(err){
+                swal("Employee","Something went wrong","error")
+            }
+        }
+
+
+   
 
     const handleClick=(e:React.MouseEvent<HTMLLIElement>)=>{
         e.preventDefault();
         let element=e.currentTarget.getAttribute('id');
+        let picked = currentEmployees?.find((emp:employeeInterface)=>emp.id===element);
 
-        let picked = currentEmployees?.find((emp:employeeInterface)=>emp.id==element)
+        setSelected(picked.id);
 
-        setSelected(picked);
-    }
+        setFirstName(picked?.firstName);
+        setLastName(picked?.lastName);
+        setPhone(picked?.phone);
+        setAddress(picked?.address);
+        setEmail(picked?.email);
+        setDOB(picked?.data_of_birth);
+        } 
+        
 
 
     return(
@@ -117,28 +224,34 @@ const Employees = ()=>{
             </div>
             </div>
             <div className='container'  style={{width:"inherit", marginRight:"35px"}}>
-               {selected && <div className="employee  card">
+               {selected && <form className="employee  card">
                     <div className="field">
                         <label htmlFor="fname">Name</label>
-                        <span id="fname">{selected?.firstName} {selected?.lastName}</span>
+                        <input type="text" placeholder="Enter first name" value={firstName} onChange={(e)=>setFirstName(e.target.value)}/>
+                        <input type="text" placeholder="Enter last name" value={lastName} onChange={(e)=>setLastName(e.target.value)}/>
                     </div>
                     <div className="field">
                         <label htmlFor="phone">Phone</label>
-                        <span id="phone">{selected?.phone}</span>
+                        <input type="text" placeholder="Enter phone number" value={phone} onChange={(e)=>setPhone(e.target.value)}/>
                     </div>
                     <div className="field">
                         <label htmlFor="email">Email</label>
-                        <span id="email">{selected?.email}</span>
+                        <input type="email" placeholder="Enter Email" value={email} onChange={(e)=>setEmail(e.target.value)}/>
                     </div>
                     <div className="field">
                         <label htmlFor="address">Address</label>
-                        <span id="address">{selected?.address}</span>
+                        <input type="text" placeholder="Enter address" value={address} onChange={(e)=>setAddress(e.target.value)}/>
                     </div>
                     <div className="field">
                         <label htmlFor="dob">Date of Birth</label>
-                        <span id="dob">{selected?.data_of_birth}</span>
+                        <input type="text" placeholder="Set Date of birth" value={dob}/>
+                        <input type="date" onChange={(e)=>setDOB(e.target.value)} style={{width:"35px"}}/>
                     </div>
-                </div>
+                    <div className="field">
+                        <button style={{backgroundColor:"rgba(9, 101, 177, 0.966)"}} onClick={(e)=>handleEdit(e)}>{editBtn}</button>
+                        <button style={{backgroundColor:"orange"}} onClick={(e)=>handleDelete(e)}>{deleteBtn}</button>
+                    </div>
+                </form>
 }
 
             </div>
