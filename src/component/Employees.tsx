@@ -5,7 +5,7 @@ import swal from 'sweetalert';
 let Base_url = (process.env.REACT_APP_BASE_URL as string);
 
 if(!Base_url){
-    Base_url = "http://localhost:5000/";
+    Base_url = "http://localhost:5500/";
 }
 
 interface employeeInterface {
